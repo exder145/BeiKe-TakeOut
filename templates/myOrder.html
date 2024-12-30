@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>购物车 - 贝壳外卖屋</title>
+	<!-- 保留原有的CSS引用 -->
+	<style>
+	.cart-section {
+		padding: 120px 0 60px 0;
+		background: linear-gradient(135deg, rgba(251,180,72,0.1) 0%, rgba(251,180,72,0.2) 100%);
+		min-height: 100vh;
+	}
+
+	.section-header {
+		text-align: center;
+		margin-bottom: 50px;
+	}
+
+	.section-header h2 {
+		font-size: 2.5em;
+		color: #333;
+		margin-bottom: 15px;
+		font-family: 'Kaushan Script', cursive;
+	}
+
+	.section-header p {
+		color: #666;
+		font-size: 1.1em;
+	}
+
+	.cart-container {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	.cart-item {
+		background: white;
+		border-radius: 15px;
+		padding: 25px;
+		margin-bottom: 20px;
+		box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+		display: flex;
+		align-items: center;
+		transition: transform 0.3s ease;
+	}
+
+	.cart-item:hover {
+		transform: translateY(-5px);
+	}
+
+	.item-image {
+		width: 120px;
+		height: 120px;
+		border-radius: 10px;
+		overflow: hidden;
+		margin-right: 25px;
+	}
+
+	.item-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.item-details {
+		flex: 1;
+	}
+
+	.item-name {
+		font-size: 1.3em;
+		color: #333;
+		margin-bottom: 10px;
+		font-weight: 500;
+	}
+
+	.item-restaurant {
+		color: #666;
+		margin-bottom: 15px;
+		display: flex;
+		align-items: center;
+	}
+
+	.item-restaurant i {
+		color: #FBB448;
+		margin-right: 8px;
+	}
+
+	.item-price {
+		font-size: 1.2em;
+		color: #FBB448;
+		font-weight: bold;
+	}
+
+	.item-actions {
+		display: flex;
+		gap: 15px;
+		margin-left: 20px;
+	}
+
+	.action-button {
+		padding: 10px 20px;
+		border: none;
+		border-radius: 8px;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+
+	.checkout-btn {
+		background: #FBB448;
+		color: white;
+	}
+
+	.remove-btn {
+		background: transparent;
+		color: #dc3545;
+		border: 1px solid #dc3545;
+	}
+
+	.action-button:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	}
+
+	.checkout-btn:hover {
+		background: #ea9f2d;
+	}
+
+	.remove-btn:hover {
+		background: #dc3545;
+		color: white;
+	}
+
+	.cart-summary {
+		background: white;
+		border-radius: 15px;
+		padding: 25px;
+		margin-top: 30px;
+		box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+	}
+
+	.summary-header {
+		font-size: 1.2em;
+		color: #333;
+		margin-bottom: 15px;
+		padding-bottom: 15px;
+		border-bottom: 1px solid #eee;
+	}
+
+	.summary-item {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 10px;
+		color: #666;
+	}
+
+	.summary-total {
+		font-size: 1.2em;
+		color: #333;
+		font-weight: bold;
+		margin-top: 15px;
+		padding-top: 15px;
+		border-top: 1px solid #eee;
+	}
+
+	.empty-cart {
+		text-align: center;
+		padding: 50px 20px;
+	}
+
+	.empty-cart i {
+		font-size: 4em;
+		color: #FBB448;
+		margin-bottom: 20px;
+	}
+
+	.empty-cart h3 {
+		color: #333;
+		margin-bottom: 10px;
+	}
+
+	.empty-cart p {
+		color: #666;
+		margin-bottom: 20px;
+	}
+
+	.browse-button {
+		display: inline-block;
+		padding: 12px 30px;
+		background: #FBB448;
+		color: white;
+		border-radius: 25px;
+		text-decoration: none;
+		transition: all 0.3s ease;
+	}
+
+	.browse-button:hover {
+		background: #ea9f2d;
+		transform: translateY(-2px);
+		box-shadow: 0 5px 15px rgba(251,180,72,0.3);
+	}
+
+	/* 导航栏样式 */
+	.navbar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1000;
+		background-color: rgba(0, 0, 0, 0.8);
+		padding: 15px 0;
+	}
+
+	.navbar-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.nav-brand {
+		font-family: 'Kaushan Script', cursive;
+		font-size: 24px;
+		color: #FBB448;
+		text-decoration: none;
+	}
+
+	.nav-menu {
+		display: flex;
+		gap: 20px;
+		align-items: center;
+	}
+
+	.nav-link {
+		color: white;
+		text-decoration: none;
+		transition: color 0.3s ease;
+	}
+
+	.nav-link:hover {
+		color: #FBB448;
+	}
+	</style>
+</head>
+<body>
+	<!-- 导航栏 -->
+	<nav class="navbar">
+		<div class="navbar-container">
+			<a href="index" class="nav-brand">贝壳外卖屋</a>
+			<div class="nav-menu">
+				<a href="personal" class="nav-link">个人中心</a>
+				<a href="UserRestList" class="nav-link">商家列表</a>
+			</div>
+		</div>
+	</nav>
+
+	<!-- 购物车内容区域 -->
+	<section class="cart-section">
+		<div class="cart-container">
+			<div class="section-header">
+				<h2>我的购物车</h2>
+				<p>即刻下单，美味送达</p>
+			</div>
+
+			{% if messages == "done" %}
+			<div class="cart-items">
+				{% for item in result %}
+				<div class="cart-item">
+					<div class="item-image">
+						<img src="{{ url_for('static', filename=item[4][1:]) }}" alt="菜品图片">
+					</div>
+					<div class="item-details">
+						<h3 class="item-name">{{ item[2] }}</h3>
+						<div class="item-restaurant">
+							<i class="ti-store"></i>
+							<span>{{ item[1] }}</span>
+						</div>
+						<div class="item-price">￥{{ item[3] }}</div>
+					</div>
+					<div class="item-actions">
+						<form action="{{ url_for('shoppingCartPage') }}" method="post" style="display: inline-block;">
+							<input type="hidden" name="restaurant" value="{{ item[1] }}">
+							<input type="hidden" name="dishname" value="{{ item[2] }}">
+							<input type="hidden" name="price" value="{{ item[3] }}">
+							<button type="submit" name="action" value="结算" class="action-button checkout-btn">
+								结算
+							</button>
+						</form>
+						<form action="{{ url_for('shoppingCartPage') }}" method="post" style="display: inline-block;">
+							<input type="hidden" name="restaurant" value="{{ item[1] }}">
+							<input type="hidden" name="dishname" value="{{ item[2] }}">
+							<button type="submit" name="action" value="删除" class="action-button remove-btn">
+								删���
+							</button>
+						</form>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+
+			<div class="cart-summary">
+				<h3 class="summary-header">订单摘要</h3>
+				<div class="summary-item">
+					<span>商品总数</span>
+					<span>{{ result|length }}件</span>
+				</div>
+				<div class="summary-item">
+					<span>配送费</span>
+					<span>￥5.00</span>
+				</div>
+				<div class="summary-total">
+					<span>总计</span>
+					<span>￥{{ total_price }}</span>
+				</div>
+			</div>
+			{% else %}
+			<div class="empty-cart">
+				<i class="ti-shopping-cart"></i>
+				<h3>购物车是空的</h3>
+				<p>去发现更多美味吧</p>
+				<a href="UserRestList" class="browse-button">浏览商家</a>
+			</div>
+			{% endif %}
+		</div>
+	</section>
+</body>
+</html>

@@ -1,0 +1,31 @@
+services:
+  web:
+    build: .
+    ports:
+      - "9090:9090"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=123456
+      - MYSQL_DATABASE=appDB
+    depends_on:
+      - db
+    volumes:
+      - ./static:/app/static
+      - ./templates:/app/templates
+    command: python app.py --mysql_pwd 123456 --db_name appDB
+
+  db:
+    image: mysql:8.0.28
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=appDB
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  mysql_data: 

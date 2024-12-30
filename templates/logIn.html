@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>登录 - 贝壳外卖屋</title>
+	<!-- <link rel="stylesheet" href="static/css/test.css" type="text/css"> -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/test.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/icomoon.css') }}">
+	<!-- Themify Icons-->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/themify-icons.css') }}">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+
+	<!-- Bootstrap DateTimePicker -->
+	<link rel="stylesheet" href="static/css/bootstrap-datetimepicker.min.css">
+
+	<!-- Owl Carousel  -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<script src="static/js/modernizr-2.6.2.min.js"></script>
+	<style>
+	.login-section {
+		min-height: 100vh;
+		background: linear-gradient(135deg, rgba(251,180,72,0.1) 0%, rgba(251,180,72,0.2) 100%);
+		display: flex;
+		align-items: center;
+		padding: 50px 0;
+	}
+	
+	.login-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+	
+	.login-wrapper {
+		display: flex;
+		background: white;
+		border-radius: 20px;
+		overflow: hidden;
+		box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+	}
+	
+	.login-image {
+		flex: 1;
+		background-image: url('static/images/img_bg_3.jpg');
+		background-size: cover;
+		background-position: center;
+		position: relative;
+		min-height: 600px;
+	}
+	
+	.login-image::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0,0,0,0.3);
+	}
+	
+	.login-image-text {
+		position: absolute;
+		bottom: 50px;
+		left: 50px;
+		right: 50px;
+		color: white;
+		z-index: 1;
+	}
+	
+	.login-image-text h2 {
+		font-size: 2.5em;
+		margin-bottom: 20px;
+		font-family: 'Kaushan Script', cursive;
+		color: #FBB448;
+	}
+	
+	.login-form-container {
+		flex: 1;
+		padding: 60px;
+		background: white;
+	}
+	
+	.login-header {
+		text-align: center;
+		margin-bottom: 40px;
+	}
+	
+	.login-header h1 {
+		font-size: 2em;
+		color: #333;
+		margin-bottom: 10px;
+	}
+	
+	.login-header p {
+		color: #666;
+		font-size: 1.1em;
+	}
+	
+	.form-group {
+		margin-bottom: 25px;
+	}
+	
+	.form-group label {
+		display: block;
+		margin-bottom: 8px;
+		color: #555;
+		font-weight: 500;
+	}
+	
+	.form-control {
+		width: 100%;
+		padding: 12px 15px;
+		border: 2px solid #eee;
+		border-radius: 8px;
+		font-size: 1em;
+		transition: all 0.3s ease;
+	}
+	
+	.form-control:focus {
+		border-color: #FBB448;
+		box-shadow: 0 0 0 3px rgba(251,180,72,0.2);
+		outline: none;
+	}
+	
+	.role-selector {
+		display: flex;
+		gap: 15px;
+		margin-bottom: 25px;
+	}
+	
+	.role-option {
+		flex: 1;
+		padding: 15px;
+		border: 2px solid #eee;
+		border-radius: 8px;
+		text-align: center;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+	
+	.role-option:hover {
+		border-color: #FBB448;
+	}
+	
+	.role-option.active {
+		border-color: #FBB448;
+		background: rgba(251,180,72,0.1);
+	}
+	
+	.role-option i {
+		font-size: 2em;
+		color: #FBB448;
+		margin-bottom: 10px;
+	}
+	
+	.submit-btn {
+		width: 100%;
+		padding: 15px;
+		background: #FBB448;
+		border: none;
+		border-radius: 8px;
+		color: white;
+		font-size: 1.1em;
+		font-weight: bold;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+	
+	.submit-btn:hover {
+		background: #ea9f2d;
+		transform: translateY(-2px);
+	}
+	
+	.login-footer {
+		text-align: center;
+		margin-top: 30px;
+	}
+	
+	.login-footer a {
+		color: #FBB448;
+		text-decoration: none;
+		font-weight: 500;
+	}
+	
+	.login-footer a:hover {
+		text-decoration: underline;
+	}
+	
+	@media (max-width: 992px) {
+		.login-image {
+			display: none;
+		}
+	}
+	</style>
+</head>
+
+<body>
+	<div class="gtco-loader"></div>
+
+	<div id="page">
+
+
+	<!-- <div class="page-inner"> -->
+	<nav class="gtco-nav" role="navigation">
+		<div class="gtco-container">
+
+			<div class="row">
+				<div class="col-sm-4 col-xs-12">
+					<div id="gtco-logo">登录</div>
+				</div>
+				<div class="col-xs-8 text-right menu-1">
+					<ul>
+						<li><a href="index">返回首页</a></li>
+						<li class="btn-cta"><a href="register"><span>注册</span></a></li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</nav>
+
+        <header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url('static/images/img_bg_1.jpg')" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-md-12 col-md-offset-0 text-left">
+
+
+					<div class="row row-mt-15em">
+						<div class="col-md-8 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
+							<div class="form-wrap">
+								<div class="tab">
+
+									<div class="tab-content">
+										<div class="tab-content-inner active" data-content="signup">
+											<h3 class="cursive-font">请登录</h3>
+											<form action="{{ url_for('logInPage') }}" method="POST">
+												<div class="role-selector">
+													<div class="role-option" onclick="selectRole('ADMIN')">
+														<i class="ti-crown"></i>
+														<p>管理员</p>
+													</div>
+													<div class="role-option" onclick="selectRole('RESTAURANT')">
+														<i class="ti-home"></i>
+														<p>商家</p>
+													</div>
+													<div class="role-option active" onclick="selectRole('CUSTOMER')">
+														<i class="ti-user"></i>
+														<p>用户</p>
+													</div>
+												</div>
+												<input type="hidden" name="userRole" id="userRole" value="CUSTOMER">
+												
+												<div class="row form-group">
+													<div class="col-md-12">
+														<label for="username">用户名</label>
+														<input type="text" name="username" placeholder="不可为空" class="form-control">
+													</div>
+												</div>
+												<div class="row form-group">
+													<div class="col-md-12">
+														<label for="activities">密码</label>
+														<input type="password" name="password" placeholder="不可为空" class="form-control">
+													</div>
+												</div>
+
+												<div class="row form-group">
+													<div class="col-md-12">
+														<input type="submit" class="btn btn-primary btn-block" name="submit" value="登录">
+													</div>
+												</div>
+											</form>
+											<div class="col-md-12">
+												<a href="register">新用户，请前往注册</a>
+												<br>
+											</div>
+											{% if messages == "done1" %}
+												<script>alert("登录成功！欢迎管理员！")</script>
+												<script type='text/javascript'>window.location.href='adminRestList'</script>
+											{% elif messages == "fail1" %}
+                                                <script>alert("登录失败！您没有管理员权限或登录信息出错。")</script>
+											{% elif messages == "done2" %}
+												<script>alert("登录成功！欢迎商家用户！")</script>
+												<script type='text/javascript'>window.location.href='MerchantIndex'</script>
+											{% elif messages == "fail2" %}
+                                                <script>alert("登录失败！您没有商家用户权限或登录信息出错。")</script>
+											{% elif messages == "done3" %}
+												<script>alert("登录成功！欢迎买家用户！")</script>
+												<script type='text/javascript'>window.location.href='UserRestList'</script>
+											{% elif messages == "fail3" %}
+                                                <script>alert("登录失败！您尚未注册或登录信息出错。")</script>
+											{% endif %}
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</header>
+
+
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
+	</div>
+
+	<!-- jQuery -->
+	<script src="static/js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="static/js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="static/js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="static/js/jquery.waypoints.min.js"></script>
+	<!-- Carousel -->
+	<script src="static/js/owl.carousel.min.js"></script>
+	<!-- countTo -->
+	<script src="static/js/jquery.countTo.js"></script>
+
+	<!-- Stellar Parallax -->
+	<script src="static/js/jquery.stellar.min.js"></script>
+
+	<!-- Magnific Popup -->
+	<script src="static/js/jquery.magnific-popup.min.js"></script>
+	<script src="static/js/magnific-popup-options.js"></script>
+
+	<script src="static/js/moment.min.js"></script>
+	<script src="static/js/bootstrap-datetimepicker.min.js"></script>
+
+
+	<!-- Main -->
+	<script src="static/js/main.js"></script>
+	<script>
+	function selectRole(role) {
+		document.getElementById('userRole').value = role;
+		// 更新选中状态的样式
+		document.querySelectorAll('.role-option').forEach(option => {
+			option.classList.remove('active');
+		});
+		event.currentTarget.classList.add('active');
+	}
+	
+	// 处理登录消息提示
+	{% if messages %}
+		{% if messages == "done1" %}
+			alert("登录成功！欢迎管理员！");
+			window.location.href = "adminRestList";
+		{% elif messages == "fail1" %}
+			alert("您没有管理员权限或登录信息出错。");
+		{% elif messages == "done2" %}
+			alert("登录成功！欢迎商家用户！");
+			window.location.href = "MerchantIndex";
+		{% elif messages == "fail2" %}
+			alert("您没有商家用户权限或登录信息出错。");
+		{% elif messages == "done3" %}
+			alert("登录成功！欢迎用户！");
+			window.location.href = "UserRestList";
+		{% elif messages == "fail3" %}
+			alert("您没有用户权限，未注册或登录信息出错。");
+		{% endif %}
+	{% endif %}
+	</script>
+</body>
+
+</html>

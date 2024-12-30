@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>注册 - 贝壳外卖屋</title>
+	<!-- 保留原有的CSS引用 -->
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/icomoon.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/themify-icons.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	
+	<style>
+	.register-section {
+		position: relative;
+		height: 100vh;
+		background-image: url('static/images/img_bg_1.jpg');
+		background-size: cover;
+		background-position: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.register-section::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: linear-gradient(135deg, rgba(251,180,72,0.1) 0%, rgba(251,180,72,0.2) 100%);
+		z-index: 1;
+	}
+	
+	.register-container {
+		position: relative;
+		z-index: 2;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px;
+		width: 100%;
+	}
+	
+	.register-wrapper {
+		margin: 50px auto;
+		max-width: 1000px;
+		display: flex;
+		background: white;
+		border-radius: 20px;
+		overflow: hidden;
+		box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+	}
+	
+	.register-image {
+		flex: 1;
+		background-image: url('static/images/img_bg_2.jpg');
+		background-size: cover;
+		background-position: center;
+		position: relative;
+		min-height: 600px;
+	}
+	
+	.register-image::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0,0,0,0.4);
+	}
+	
+	.register-image-text {
+		position: absolute;
+		bottom: 50px;
+		left: 50px;
+		right: 50px;
+		color: white;
+		z-index: 1;
+	}
+	
+	.register-image-text h2 {
+		font-size: 2.5em;
+		margin-bottom: 20px;
+		font-family: 'Kaushan Script', cursive;
+		color: #FBB448;
+	}
+	
+	.register-form-container {
+		flex: 1;
+		padding: 60px;
+		background: white;
+	}
+	
+	.register-header {
+		text-align: center;
+		margin-bottom: 40px;
+	}
+	
+	.register-header h1 {
+		font-size: 2em;
+		color: #333;
+		margin-bottom: 10px;
+		font-family: 'Kaushan Script', cursive;
+	}
+	
+	.register-header p {
+		color: #666;
+		font-size: 1.1em;
+	}
+	
+	.form-group {
+		margin-bottom: 25px;
+	}
+	
+	.form-group label {
+		display: block;
+		margin-bottom: 8px;
+		color: #555;
+		font-weight: 500;
+	}
+	
+	.form-control {
+		width: 100%;
+		padding: 12px 15px;
+		border: 2px solid #eee;
+		border-radius: 8px;
+		font-size: 1em;
+		transition: all 0.3s ease;
+	}
+	
+	.form-control:focus {
+		border-color: #FBB448;
+		box-shadow: 0 0 0 3px rgba(251,180,72,0.2);
+		outline: none;
+	}
+	
+	.role-selector {
+		display: flex;
+		gap: 15px;
+		margin-bottom: 25px;
+	}
+	
+	.role-option {
+		flex: 1;
+		padding: 15px;
+		border: 2px solid #eee;
+		border-radius: 8px;
+		text-align: center;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+	
+	.role-option:hover {
+		border-color: #FBB448;
+	}
+	
+	.role-option.active {
+		border-color: #FBB448;
+		background: rgba(251,180,72,0.1);
+	}
+	
+	.role-option i {
+		font-size: 2em;
+		color: #FBB448;
+		margin-bottom: 10px;
+	}
+	
+	.submit-btn {
+		width: 100%;
+		padding: 15px;
+		background: #FBB448;
+		border: none;
+		border-radius: 8px;
+		color: white;
+		font-size: 1.1em;
+		font-weight: bold;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+	
+	.submit-btn:hover {
+		background: #ea9f2d;
+		transform: translateY(-2px);
+	}
+	
+	.register-footer {
+		text-align: center;
+		margin-top: 30px;
+	}
+	
+	.register-footer a {
+		color: #FBB448;
+		text-decoration: none;
+		font-weight: 500;
+	}
+	
+	.register-footer a:hover {
+		text-decoration: underline;
+	}
+	
+	@media (max-width: 992px) {
+		.register-image {
+			display: none;
+		}
+	}
+	</style>
+</head>
+<body>
+	<!-- 导航栏 -->
+	<nav class="gtco-nav" role="navigation">
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-sm-4 col-xs-12">
+					<div id="gtco-logo"><a href="index">贝壳外卖屋 <em></em></a></div>
+				</div>
+				<div class="col-xs-8 text-right menu-1">
+					<ul>
+						<li><a href="index">返回首页</a></li>
+						<li class="btn-cta"><a href="logIn"><span>登录</span></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<!-- 注册区域 -->
+	<section class="register-section">
+		<div class="register-container">
+			<div class="register-wrapper">
+				<!-- 左侧图片 -->
+				<div class="register-image">
+					<div class="register-image-text">
+						<h2>加入贝壳外卖</h2>
+						<p>开启美食之旅</p>
+					</div>
+				</div>
+				
+				<!-- 右侧注册表单 -->
+				<div class="register-form-container">
+					<div class="register-header">
+						<h1>用户注册</h1>
+						<p>请选择您的身份并完成注册</p>
+					</div>
+					
+					<form action="{{ url_for('registerPage') }}" method="POST">
+						<!-- 角色选择 -->
+						<div class="role-selector">
+							<div class="role-option" onclick="selectRole('RESTAURANT')">
+								<i class="ti-home"></i>
+								<p>商家</p>
+							</div>
+							<div class="role-option active" onclick="selectRole('CUSTOMER')">
+								<i class="ti-user"></i>
+								<p>用户</p>
+							</div>
+						</div>
+						<input type="hidden" name="userRole" id="userRole" value="CUSTOMER">
+						
+						<!-- 注册表单字段 -->
+						<div class="form-group">
+							<label>用户名</label>
+							<input type="text" name="username" class="form-control" required>
+						</div>
+						
+						<div class="form-group">
+							<label>密码</label>
+							<input type="password" name="password" class="form-control" required>
+						</div>
+						
+						<div class="form-group">
+							<label>联系电话</label>
+							<input type="tel" name="phone" class="form-control" required>
+						</div>
+						
+						<div class="form-group">
+							<label>地址</label>
+							<input type="text" name="addr" class="form-control" required>
+						</div>
+						
+						<button type="submit" class="submit-btn">注册账号</button>
+					</form>
+					
+					<div class="register-footer">
+						<p>已有账号？ <a href="logIn">立即登录</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- JavaScript -->
+	<script>
+	function selectRole(role) {
+		document.getElementById('userRole').value = role;
+		document.querySelectorAll('.role-option').forEach(option => {
+			option.classList.remove('active');
+		});
+		event.currentTarget.classList.add('active');
+	}
+	
+	// 处理注册消息提示
+	{% if messages %}
+		{% if messages == "done1" %}
+			alert("商家注册成功！");
+			window.location.href = "logIn";
+		{% elif messages == "fail1" %}
+			alert("注册失败！该商家已注册！");
+		{% elif messages == "done2" %}
+			alert("用户注册成功！");
+			window.location.href = "logIn";
+		{% elif messages == "fail2" %}
+			alert("注册失败！该用户已注册！");
+		{% endif %}
+	{% endif %}
+	</script>
+</body>
+</html>

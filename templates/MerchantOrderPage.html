@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>个人中心</title>
+	<link rel="stylesheet" href="static/css/OrderPage.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="static/js/modernizr-2.6.2.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/icomoon.css') }}">
+	<!-- Themify Icons-->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/themify-icons.css') }}">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+	<!-- Bootstrap DateTimePicker -->
+	<link rel="stylesheet" href="static/css/bootstrap-datetimepicker.min.css">
+	<!-- Owl Carousel  -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+
+
+</head>
+<body>
+	<div class="navbkg" >
+    <nav class="gtco-nav" role="navigation" style="background-color: rgba(0, 0, 0, 0.8);">
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-sm-4 col-xs-12">
+                    <div id="gtco-logo"><a href="MerchantOrderPage">查看订单 <em>.</em></a></div>
+                </div>
+                <div class="col-xs-8 text-right menu-1">
+                    <ul>
+                        <li class="has-dropdown">
+                            <a href="MerchantIndex">其他功能</a>
+                            <ul class="dropdown">
+								<li><a href="MerchantModifyPerInfo">修改个人信息</a></li>
+								<li><a href="MerchantModifyPwd">修改密码</a></li>
+                                <li><a href="ResCommentList">查看评论</a></li>
+                                <li><a href="MerchantMenu">菜单列表</a></li>
+
+                            </ul>
+						</li>
+						<li><a href="MerchantIndex">返回首页</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+	</nav>
+	</div>
+
+	<div class="gtco-section">
+		<div class="gtco-container">
+			<!-- 标题部分优化 -->
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+					<h2 style="font-size: 40px; color: #FBB448; font-family: 'Kaushan Script', cursive;">订单管理中心</h2>
+					<p class="subtle-text">Order Management</p>
+				</div>
+			</div>
+
+			<!-- 筛选条件优化 -->
+			<div class="row mb-4">
+				<div class="col-md-12">
+					<form action="{{ url_for('MerchantOrderPage') }}" method="post" class="form-inline justify-content-between">
+						<div class="filter-group">
+							<button type="submit" name="action" value="按时间排序" class="btn btn-primary mr-2">
+								<i class="ti-time"></i> 按时间排序
+							</button>
+							<button type="submit" name="action" value="按价格排序" class="btn btn-primary">
+								<i class="ti-money"></i> 按价格排序
+							</button>
+						</div>
+						<div class="unfinished-orders">
+							<button type="submit" name="action" value="未完成订单" class="btn btn-warning">
+								未完成订单 <span class="badge badge-light">{{ notFinishedNum }}</span>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- 订单列表优化 -->
+			<div class="row">
+				{% if messages == "done" %}
+					{% for item in result %}
+						<div class="col-md-6 col-lg-4 mb-4">
+							<div class="card order-card">
+								<div class="card-header">
+									<h5 class="card-title">订单号：{{ item[0] }}</h5>
+									{% if item[7] == 1 %}
+										<span class="badge badge-success">已完成</span>
+									{% else %}
+										<span class="badge badge-warning">待处理</span>
+									{% endif %}
+								</div>
+								<div class="card-body">
+									<div class="order-image">
+										<img src={{item[8]}} alt="菜品图片" class="img-fluid rounded">
+									</div>
+									<div class="order-details">
+										<p><strong>菜品：</strong>{{ item[2] }}</p>
+										<p><strong>交易时间：</strong>{{ item[9] }}</p>
+										{% if item[4] == 1 %}
+											<p><strong>就餐方式：</strong>堂食</p>
+											<p><strong>餐厅地址：</strong>{{ item[6] }}</p>
+											<p><strong>取餐时间：</strong>{{ item[5] }}</p>
+										{% else %}
+											<p><strong>就餐方式：</strong>外卖</p>
+											<p><strong>配送地址：</strong>{{ item[6] }}</p>
+											<p><strong>送达时间：</strong>{{ item[5] }}</p>
+										{% endif %}
+										<p class="price">￥{{ item[13] }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				{% elif messages == "none" %}
+					<div class="col-12">
+						<div class="alert alert-info text-center" role="alert">
+							<i class="ti-info-circle"></i> 暂无订单信息
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div>
+	</div>
+
+	<!-- 添加自定义CSS -->
+	<style>
+	.subtle-text {
+		color: #999;
+		font-size: 16px;
+		margin-top: -10px;
+	}
+
+	.filter-group {
+		margin-bottom: 20px;
+	}
+
+	.btn {
+		padding: 8px 16px;
+		border-radius: 4px;
+		margin-right: 10px;
+	}
+
+	.btn i {
+		margin-right: 5px;
+	}
+
+	.order-card {
+		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		transition: transform 0.2s;
+		margin-bottom: 20px;
+	}
+
+	.order-card:hover {
+		transform: translateY(-5px);
+	}
+
+	.card-header {
+		background-color: #f8f9fa;
+		border-bottom: 1px solid #eee;
+		padding: 15px;
+	}
+
+	.order-image {
+		height: 200px;
+		overflow: hidden;
+		margin-bottom: 15px;
+	}
+
+	.order-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.order-details {
+		padding: 15px;
+	}
+
+	.order-details p {
+		margin-bottom: 8px;
+		color: #666;
+	}
+
+	.price {
+		font-size: 24px;
+		color: #FBB448;
+		font-weight: bold;
+		margin-top: 15px;
+	}
+
+	.badge {
+		padding: 5px 10px;
+		border-radius: 20px;
+	}
+
+	.badge-success {
+		background-color: #28a745;
+	}
+
+	.badge-warning {
+		background-color: #ffc107;
+		color: #000;
+	}
+
+	.mb-4 {
+		margin-bottom: 1.5rem;
+	}
+	</style>
+
+	<!-- jQuery -->
+	<script src="static/js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="static/js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="static/js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="static/js/jquery.waypoints.min.js"></script>
+	<!-- Carousel -->
+	<script src="static/js/owl.carousel.min.js"></script>
+	<!-- countTo -->
+	<script src="static/js/jquery.countTo.js"></script>
+
+	<!-- Stellar Parallax -->
+	<script src="static/js/jquery.stellar.min.js"></script>
+
+	<!-- Magnific Popup -->
+	<script src="static/js/jquery.magnific-popup.min.js"></script>
+	<script src="static/js/magnific-popup-options.js"></script>
+
+	<script src="static/js/moment.min.js"></script>
+	<script src="static/js/bootstrap-datetimepicker.min.js"></script>
+
+
+	<!-- Main -->
+	<script src="static/js/main.js"></script>
+</body>
+</html>

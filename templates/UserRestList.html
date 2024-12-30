@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>商家列表 - 贝壳外卖屋</title>
+	<!-- 保留原有的CSS引用 -->
+	<style>
+	.restaurant-list {
+		padding: 120px 0 60px 0;
+		background: linear-gradient(135deg, rgba(251,180,72,0.1) 0%, rgba(251,180,72,0.2) 100%);
+		min-height: 100vh;
+	}
+
+	.section-header {
+		text-align: center;
+		margin-bottom: 50px;
+	}
+
+	.section-header h2 {
+		font-size: 2.5em;
+		color: #333;
+		margin-bottom: 15px;
+		font-family: 'Kaushan Script', cursive;
+	}
+
+	.section-header p {
+		color: #666;
+		font-size: 1.1em;
+	}
+
+	.restaurant-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 30px;
+		padding: 0 20px;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.restaurant-card {
+		background: white;
+		border-radius: 15px;
+		overflow: hidden;
+		box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+		transition: transform 0.3s ease;
+	}
+
+	.restaurant-card:hover {
+		transform: translateY(-10px);
+	}
+
+	.restaurant-image {
+		height: 200px;
+		overflow: hidden;
+		position: relative;
+	}
+
+	.restaurant-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.restaurant-info {
+		padding: 25px;
+	}
+
+	.restaurant-name {
+		font-size: 1.5em;
+		color: #333;
+		margin-bottom: 15px;
+		font-weight: 500;
+	}
+
+	.restaurant-detail {
+		display: flex;
+		align-items: center;
+		margin-bottom: 10px;
+		color: #666;
+	}
+
+	.restaurant-detail i {
+		color: #FBB448;
+		margin-right: 10px;
+	}
+
+	.restaurant-actions {
+		display: flex;
+		gap: 15px;
+		margin-top: 20px;
+	}
+
+	.action-button {
+		flex: 1;
+		padding: 10px;
+		border: none;
+		border-radius: 8px;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		text-align: center;
+		text-decoration: none;
+	}
+
+	.primary-button {
+		background: #FBB448;
+		color: white;
+	}
+
+	.secondary-button {
+		background: transparent;
+		color: #FBB448;
+		border: 1px solid #FBB448;
+	}
+
+	.action-button:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	}
+
+	/* 导航栏样式优化 */
+	.navbar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1000;
+		background-color: rgba(0, 0, 0, 0.8);
+		padding: 15px 0;
+		transition: all 0.3s ease;
+	}
+
+	.navbar-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0 20px;
+	}
+
+	.nav-brand {
+		font-family: 'Kaushan Script', cursive;
+		font-size: 24px;
+		color: #FBB448;
+		text-decoration: none;
+	}
+
+	.nav-menu {
+		display: flex;
+		gap: 20px;
+		align-items: center;
+	}
+
+	.nav-link {
+		color: white;
+		text-decoration: none;
+		transition: color 0.3s ease;
+	}
+
+	.nav-link:hover {
+		color: #FBB448;
+	}
+
+	.nav-button {
+		padding: 8px 20px;
+		border-radius: 25px;
+		background: #FBB448;
+		color: white;
+		text-decoration: none;
+		transition: all 0.3s ease;
+	}
+
+	.nav-button:hover {
+		background: white;
+		color: #FBB448;
+	}
+	</style>
+</head>
+<body>
+	<!-- 导航栏 -->
+	<nav class="navbar">
+		<div class="navbar-container">
+			<a href="index" class="nav-brand">贝壳外卖屋</a>
+			<div class="nav-menu">
+				<a href="personal" class="nav-link">个人中心</a>
+				<a href="myOrder" class="nav-link">购物车</a>
+				<a href="index" class="nav-link">退出登录</a>
+			</div>
+		</div>
+	</nav>
+
+	<!-- 商家列表区域 -->
+	<section class="restaurant-list">
+		<div class="section-header">
+			<h2>精选商家</h2>
+			<p>为您推荐优质商家，开启美食之旅</p>
+		</div>
+
+		{% if messages == "done" %}
+		<div class="restaurant-grid">
+			{% for item in result %}
+			<div class="restaurant-card">
+				<div class="restaurant-image">
+					<img src="/static/images/restaurant/{{ item[0] }}.jpg" alt="{{ item[0] }}">
+				</div>
+				<div class="restaurant-info">
+					<h3 class="restaurant-name">{{ item[0] }}</h3>
+					<div class="restaurant-detail">
+						<i class="ti-location-pin"></i>
+						<span>{{ item[2] }}</span>
+					</div>
+					<div class="restaurant-detail">
+						<i class="ti-mobile"></i>
+						<span>{{ item[3] }}</span>
+					</div>
+					<div class="restaurant-actions">
+						<form action="{{ url_for('menu') }}" method="post" style="flex: 1;">
+							<input type="hidden" name="restaurant" value="{{ item[0] }}">
+							<button type="submit" name="action" value="进入本店" class="action-button primary-button">
+								进入本店
+							</button>
+						</form>
+						<form action="{{ url_for('resComment') }}" method="post" style="flex: 1;">
+							<input type="hidden" name="restaurant" value="{{ item[0] }}">
+							<button type="submit" name="action" value="查看评价" class="action-button secondary-button">
+								查看评价
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		{% endif %}
+	</section>
+</body>
+</html>
