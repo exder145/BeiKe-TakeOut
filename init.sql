@@ -204,3 +204,11 @@ VALUES (
     );
 SELECT *
 FROM ORDER_COMMENT;
+CREATE TABLE `USER_FEEDBACK` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `username` CHAR(15),
+    `dish_name` VARCHAR(50),
+    `restaurant` VARCHAR(50),
+    `action` ENUM('like', 'dislike'),
+    `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

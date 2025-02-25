@@ -15,8 +15,15 @@ import argparse
 import sys
 import importlib
 import time
+from recommendation import RecommendationSystem
+import pandas as pd
+import requests
+from dotenv import load_dotenv
 
 importlib.reload(sys)
+
+# 加载环境变量
+load_dotenv()
 
 app = Flask(__name__, static_url_path='/static')
 mysql_pwd = "11235813"
@@ -702,7 +709,21 @@ def shoppingCartPage():
 # 个人中心页面
 @app.route('/personal')
 def personalPage():
-    return render_template('personal.html')
+    global username
+    order_data = get_order_data(username)  # 获取用户历史订单数据
+    recommender = RecommendationSystem(order_data)
+    recommender.fit()
+
+    # 假设用户的订单数据
+    user_order = pd.DataFrame({
+        'dish_name': ['pizza'],  # 这里可以根据实际情况调整
+        'restaurant': ['rest1']
+    })
+
+    # 获取推荐结果
+    recommendations = recommender.recommend(user_order)
+
+    return render_template('personal.html', recommendations=recommendations)
 
 
 # 修改个人信息页面
@@ -1183,7 +1204,7 @@ def WriteCommentsPage():
         except:
             print("Error: unable to use database!")
 
-        sql = "SELECT * FROM ORDER_COMMENT WHERE username = '%s' AND isFinished = 0 AND text = '' " % username
+        sql = "SELECT * FROM ORDER_COMMENT WHERE username = '%s' AND isFinished = 0 " % username
         cursor.execute(sql)
         res = cursor.fetchall()
         print(res)
@@ -1400,6 +1421,7 @@ def MenuModify():
         if filename != '':
             f.save('static/images/' + filename)
         imgsrc = 'static/images/' + filename
+		
 		
 		
         print(isSpecialty)
@@ -1697,7 +1719,7 @@ def MerchantOrderPage():
         else:
             print("NULL")
             msg = "none"
-        return render_template('MerchantOrderPage.html', username=username, messages=msg, notFinishedNum=notFinishedNum)
+        return render_template('MerchantOrderPage.html', username=username, messages=msg)
     elif request.form["action"] == "未完成订单":
         db = pymysql.connect(
             host=os.getenv('MYSQL_HOST', 'localhost'),
@@ -1730,7 +1752,54 @@ def MerchantOrderPage():
         return render_template('MerchantOrderPage.html', username=username, messages=msg)
 
 
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    dish_name = request.form['dish_name']
+    restaurant = request.form['restaurant']
+    action = request.form['action']
 
+    # 将反馈存储到数据库
+    db = pymysql.connect(
+        host=os.getenv('MYSQL_HOST', 'localhost'),
+        user=os.getenv('MYSQL_USER', 'root'), 
+        password=os.getenv('MYSQL_PASSWORD', mysql_pwd),
+        db=os.getenv('MYSQL_DATABASE', db_name),
+        charset='utf8mb4'
+    )
+    cursor = db.cursor()
+    try:
+        cursor.execute("use appDB")
+    except:
+        print("Error: unable to use database!")
+
+    sql = """INSERT INTO USER_FEEDBACK (username, dish_name, restaurant, action) 
+             VALUES ('{}', '{}', '{}', '{}')""".format(username, dish_name, restaurant, action)
+    cursor.execute(sql)
+    db.commit()
+
+    return redirect(url_for('personalPage'))
+
+@app.route('/ask', methods=['POST'])
+def ask_gpt():
+    user_question = request.form['question']
+    response = get_gpt_response(user_question)
+    return render_template('personal.html', question=user_question, answer=response)
+
+def get_gpt_response(question):
+    api_key = os.getenv('GPT4_API_KEY')  # 从环境变量中获取 GPT-4 API 密钥
+    headers = {
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json'
+    }
+    data = {
+        'model': 'gpt-4',
+        'messages': [{'role': 'user', 'content': question}]
+    }
+    response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, json=data)
+    if response.status_code == 200:
+        return response.json()['choices'][0]['message']['content']
+    else:
+        return "抱歉，我无法回答这个问题。"
 
 def parse_args():
     """parse the command line args
@@ -1759,3 +1828,22 @@ if __name__ == '__main__':
     mysql_pwd = args.mysql_pwd
     db_name = args.db_name
     app.run(host='0.0.0.0', port=9090)
+
+def get_order_data(username):
+    db = pymysql.connect(
+        host=os.getenv('MYSQL_HOST', 'localhost'),
+        user=os.getenv('MYSQL_USER', 'root'), 
+        password=os.getenv('MYSQL_PASSWORD', mysql_pwd),
+        db=os.getenv('MYSQL_DATABASE', db_name),
+        charset='utf8mb4'
+    )
+    cursor = db.cursor()
+    try:
+        cursor.execute("use appDB")
+    except:
+        print("Error: unable to use database!")
+
+    sql = "SELECT dish_name, restaurant FROM ORDER_COMMENT WHERE username = '{}'".format(username)
+    cursor.execute(sql)
+    order_data = cursor.fetchall()
+    return pd.DataFrame(order_data, columns=['dish_name', 'restaurant'])

@@ -108,6 +108,31 @@
 	</div>
 	</div>
 
+    <h2>个性化推荐</h2>
+    <ul>
+        {% for item in recommendations.iterrows() %}
+            <li>
+                {{ item[1]['dish_name'] }} - {{ item[1]['restaurant'] }} - ￥{{ item[1]['price'] }}
+                <form action="{{ url_for('feedback') }}" method="POST">
+                    <input type="hidden" name="dish_name" value="{{ item[1]['dish_name'] }}">
+                    <input type="hidden" name="restaurant" value="{{ item[1]['restaurant'] }}">
+                    <button type="submit" name="action" value="like">喜欢</button>
+                    <button type="submit" name="action" value="dislike">不喜欢</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>问答功能</h2>
+    <form action="{{ url_for('ask_gpt') }}" method="POST">
+        <input type="text" name="question" placeholder="请输入您的问题" required>
+        <button type="submit">提问</button>
+    </form>
+
+    {% if answer %}
+        <h3>回答：</h3>
+        <p>{{ answer }}</p>
+    {% endif %}
 
     	<!-- jQuery -->
 	<script src="static/js/jquery.min.js"></script>
